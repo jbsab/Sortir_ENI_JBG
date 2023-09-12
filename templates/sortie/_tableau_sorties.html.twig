@@ -1,0 +1,34 @@
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th scope="col">Nom de la sortie</th>
+        <th scope="col">Date de la sortie</th>
+        <th scope="col">Clôture</th>
+        <th scope="col">Inscrits/places</th>
+        <th scope="col">Etat</th>
+        <th scope="col">Organisateur</th>
+        <th scope="col">actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sortie in sorties %}
+        <tr>
+            <td>{{ sortie.nomSortie }}</td>
+            <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</td>
+            <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+            <td>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</td>
+            <td>{{ sortie.etat }}</td>
+            <td>TODO</td>
+            <td>
+                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher la sortie</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="9">Pas de sortie trouvée</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ path('app_sortie_new') }}"><button class="btn btn-primary">Créer une sortie</button></a>

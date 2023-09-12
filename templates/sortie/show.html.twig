@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sortie "{{ sortie.nomSortie }}"{% endblock %}
+
+{% block body %}
+    <div class="container-fluid container-md card shadow p-3">
+    <h1>Sortie "{{ sortie.nomSortie }}"</h1>
+
+    <table class="table">
+        <tbody>
+
+        {% if is_granted("ROLE_ADMIN") %}
+            <tr>
+                <th>Id</th>
+                <td>{{ sortie.id }}</td>
+            </tr>
+        {% endif %}
+            <tr>
+                <th>Nom de la sortie </th>
+                <td>{{ sortie.nomSortie }}</td>
+            </tr>
+            <tr>
+                <th>Date et heure de la sortie</th>
+                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</td>
+            </tr>
+
+            <tr>
+            <th>Date Limite d'Inscription</th>
+            <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nombre de places</th>
+                <td>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</td>
+            </tr>
+
+            <tr>
+                <th>Duree</th>
+                <td>{{ sortie.duree }} minutes TODO CONVERSION</td>
+            </tr>
+
+
+            <tr>
+                <th>Descriptions et infos</th>
+                <td>{{ sortie.infosSortie }}</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>{{ sortie.etat }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('sortir_main') }}">Retour à l'accueil</a>
+        {% if is_granted("ROLE_ADMIN") %}
+    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier la sortie</a>
+
+    {{ include('sortie/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
+
+
+    <div class="p-5">
+       <p>TODO RAJOUTER UN TABLEAU DE LA LISTE DES PARTICIPANTS INSCRITS</p>
+       <p>TODO RAJOUTER LES INFOS DU LIEU ET DU CAMPUS</p>
+    </div>
+{% endblock %}

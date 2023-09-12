@@ -2,32 +2,30 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Sortie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserType extends AbstractType
+class SortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('password')
-            ->add('lastName')
-            ->add('firstname')
-            ->add('phoneNumber')
-            ->add('mail')
-            ->add('profilePicture')
-            ->add('isActive')
-            ->add('isAdmin')
+            ->add('nomSortie')
+            ->add('dateHeureDebut')
+            ->add('duree')
+            ->add('dateLimiteInscription')
+            ->add('nbInscriptionsMax')
+            ->add('infosSortie')
+            ->add('etat')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Sortie::class,
         ]);
     }
 }
