@@ -12,12 +12,24 @@
                 <td>{{ user.id }}</td>
             </tr>
             <tr>
+                <th>Username</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ user.password }}</td>
+            </tr>
+            <tr>
                 <th>LastName</th>
                 <td>{{ user.lastName }}</td>
             </tr>
             <tr>
-                <th>FirstName</th>
-                <td>{{ user.firstName }}</td>
+                <th>Firstname</th>
+                <td>{{ user.firstname }}</td>
             </tr>
             <tr>
                 <th>PhoneNumber</th>
@@ -28,24 +40,16 @@
                 <td>{{ user.mail }}</td>
             </tr>
             <tr>
-                <th>Nickname</th>
-                <td>{{ user.nickname }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>IsAdmin</th>
-                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
+                <th>ProfilePicture</th>
+                <td>{{ user.profilePicture }}</td>
             </tr>
             <tr>
                 <th>IsActive</th>
                 <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>ProfilePicture</th>
-                <td>{{ user.profilePicture }}</td>
+                <th>IsAdmin</th>
+                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
