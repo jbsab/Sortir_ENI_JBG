@@ -14,7 +14,15 @@
     </head>
     <body>
     {% include 'includes/_header.html.twig' %}
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="p-3 mb-2 {{ label }} bg-gradient text-white">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
         {% block body %}{% endblock %}
+
     {% include 'includes/_footer.html.twig' %}
     </body>
 </html>
