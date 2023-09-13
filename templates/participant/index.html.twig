@@ -3,7 +3,8 @@
 {% block title %}Participant index{% endblock %}
 
 {% block body %}
-    <h1>Participant index</h1>
+<div class="container-fluid container-md p-5 card shadow">
+    <h1>Participant</h1>
 
     <table class="table">
         <thead>
@@ -35,8 +36,8 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>{{ participant.image }}</td>
                 <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary btn-sm">show</a>
+                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-warning btn-sm">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -46,6 +47,11 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="d-flex justify-content-center">
+    <button class="btn btn-secondary">
+        <a href="{{ path('sortir_register') }}" class="text-black text-decoration-none">Create new</a>
+    </button>
+    </div>
 
-    <a href="{{ path('app_register') }}">Create new</a>
+</div>
 {% endblock %}
