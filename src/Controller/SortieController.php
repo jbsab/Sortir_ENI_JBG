@@ -26,14 +26,16 @@ class SortieController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
+        $sortie->setNbInscrits(0);
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($sortie);
             $entityManager->flush();
+            $this->addFlash('bg-success', 'La sortie a bien été crée.');
 
-            return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('sortie/new.html.twig', [
@@ -58,8 +60,9 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('bg-warning', 'La sortie a bien été modifée');
 
-            return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('sortie/edit.html.twig', [
@@ -74,8 +77,9 @@ class SortieController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
             $entityManager->remove($sortie);
             $entityManager->flush();
+            $this->addFlash('bg-danger', 'La sortie a bien été supprimée.');
         }
 
-        return $this->redirectToRoute('app_sortie_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
 }

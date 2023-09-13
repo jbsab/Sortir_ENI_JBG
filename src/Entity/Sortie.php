@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SortieRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
@@ -20,23 +21,23 @@ class Sortie
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $duree = null;
+    #[ORM\Column(nullable: true, options: [ 'unsigned' => true ])]
+    private ?int $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options: [ 'unsigned' => true ])]
     private ?int $nbInscriptionsMax = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $infosSortie = null;
 
-    #[ORM\Column]
-    private ?int $etat = 0;
-
-    #[ORM\Column]
+    #[ORM\Column(options: [ 'unsigned' => true ])]
     private ?int $nbInscrits = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $etat = 'créée';
 
     public function getId(): ?int
     {
@@ -67,12 +68,12 @@ class Sortie
         return $this;
     }
 
-    public function getDuree(): ?float
+    public function getDuree(): ?int
     {
         return $this->duree;
     }
 
-    public function setDuree(?float $duree): static
+    public function setDuree(?int $duree): static
     {
         $this->duree = $duree;
 
@@ -115,18 +116,6 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?int
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(int $etat): static
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
-
     public function getNbInscrits(): ?int
     {
         return $this->nbInscrits;
@@ -138,4 +127,17 @@ class Sortie
 
         return $this;
     }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
 }

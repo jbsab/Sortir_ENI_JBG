@@ -1,4 +1,8 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn btn-success m-2">{{ button_label|default('Enregistrer') }}</button>
+    <button class="btn btn-primary m-2" disabled>{{ button_label|default('TODO Publier la sortie') }}</button>
+    <a href="{{ path('sortir_main') }}" >
+    <button type="button" class="btn btn-warning m-2" formnovalidate>Annuler</button>
+    </a>
 {{ form_end(form) }}
