@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
+use App\Entity\Etat;
 use App\Entity\Sortie;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -26,6 +29,7 @@ class SortieType extends AbstractType
             ])
             ->add('dateLimiteInscription', DateType::class, [
                 'label' => 'Date limite d\'inscription',
+                'widget' => 'single_text',
             ])
             ->add('duree', NumberType::class, [
                 'label' => 'Durée'
@@ -37,7 +41,18 @@ class SortieType extends AbstractType
             ->add('infosSortie', TextareaType::class, [
                 'label' => 'Descriptions et infos'
             ])
-            ->add('etat')
+            ->add('etat', EntityType::class,[
+                'class' => Etat::class,
+                'label' => 'Etat (selectionner)',
+                'placeholder' => '---Selectionner---',
+                'choice_label' => 'libelle'
+                ])
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'label' => 'Choisir le campus organisateur',
+                'placeholder' => '---Selectionner---',
+                'choice_label' => 'nom'
+            ])
         ;
     }
 

@@ -36,8 +36,13 @@ class Sortie
     #[ORM\Column(options: [ 'unsigned' => true ])]
     private ?int $nbInscrits = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $etat = 'créée';
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etat $etat = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
 
     public function getId(): ?int
     {
@@ -128,14 +133,26 @@ class Sortie
         return $this;
     }
 
-    public function getEtat(): ?string
+    public function getEtat(): ?Etat
     {
         return $this->etat;
     }
 
-    public function setEtat(string $etat): static
+    public function setEtat(?Etat $etat): static
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
 
         return $this;
     }
