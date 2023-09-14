@@ -16,13 +16,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('sortir_main') }}">Accueil</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Mon Profil</a>
-            </li>
             {% if app.user %}
                 <div class="mb-3 mt-2">
                     Connecté avec {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-black text-decoration-none">Déconnexion</a>
                 </div>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                </li>
             {% endif %}
             <li class="nav-item"></li>
         </ul>
