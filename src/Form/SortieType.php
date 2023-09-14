@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -53,6 +54,13 @@ class SortieType extends AbstractType
                 'placeholder' => '---Selectionner---',
                 'choice_label' => 'nom'
             ])
+            ->add('lieu', EntityType::class, [
+                'class' => Lieu::class,
+                'label' => 'Choisir le lieu de la sortie',
+                'placeholder' => '---Selectionner---',
+                'choice_label' => 'nom'
+            ])
+
         ;
     }
 

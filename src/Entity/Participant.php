@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +52,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
+
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class)]
+    private Collection $sorties;
+
+    #[ORM\ManyToMany(targetEntity: Sortie::class, mappedBy: 'inscrit')]
+    private Collection $estInscrit;
+
+    public function __construct()
+    {
+        $this->sorties = new ArrayCollection();
+        $this->estInscrit = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -201,6 +215,63 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCampus(?Campus $campus): static
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): static
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties->add($sorty);
+            $sorty->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): static
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            // set the owning side to null (unless already changed)
+            if ($sorty->getOrganisateur() === $this) {
+                $sorty->setOrganisateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getEstInscrit(): Collection
+    {
+        return $this->estInscrit;
+    }
+
+    public function addEstInscrit(Sortie $estInscrit): static
+    {
+        if (!$this->estInscrit->contains($estInscrit)) {
+            $this->estInscrit->add($estInscrit);
+            $estInscrit->addInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstInscrit(Sortie $estInscrit): static
+    {
+        if ($this->estInscrit->removeElement($estInscrit)) {
+            $estInscrit->removeInscrit($this);
+        }
 
         return $this;
     }

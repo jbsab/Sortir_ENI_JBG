@@ -18,7 +18,7 @@
             <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
             <td>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</td>
             <td>{{ sortie.etat }}</td>
-            <td>TODO</td>
+            <td>{{ sortie.organisateur.nom }}</td>
             <td>
                 <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher la sortie</a>
             </td>

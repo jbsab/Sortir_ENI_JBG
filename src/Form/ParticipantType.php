@@ -23,6 +23,12 @@ class ParticipantType extends AbstractType
             ->add('administrateur')
             ->add('actif')
             ->add('image')
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'label' => 'Choisir votre campus',
+                'placeholder' => '---Selectionner---',
+                'choice_label' => 'nom'
+            ])
 
         ;
     }
