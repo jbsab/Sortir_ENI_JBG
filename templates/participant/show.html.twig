@@ -48,14 +48,14 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ participant.image }}</td>
+                <td> <img src="../media/{{ participant.image }}" alt="photo de profil"></td>
             </tr>
         </tbody>
     </table>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center p-1">
             <a href="{{ path('app_participant_index') }}"><button class="btn btn-primary">back to list</button></a>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center p-1">
             <a href="{{ path('app_participant_edit', {'id': participant.id}) }}"><button class="btn btn-warning">edit</button></a>
         </div>
             {{ include('participant/_delete_form.html.twig') }}

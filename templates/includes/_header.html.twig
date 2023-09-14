@@ -1,4 +1,4 @@
-<header class="container-md container-fluid p-1">
+<header class="container-md container-fluid p-1 shadow rounded">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <img src="{{ asset('media/favicon.ico') }}" width="50" height="50" class="custom-margin">
@@ -7,7 +7,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse mt-2 d-flex justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" href="#">Villes</a>
@@ -19,9 +19,9 @@
                 <a class="nav-link" href="{{ path('sortir_main') }}">Accueil</a>
             </li>
             {% if app.user %}
-                <div class="mb-3 mt-2">
+                <li class="mb-3 mt-2">
                     Connecté avec {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-black text-decoration-none">Déconnexion</a>
-                </div>
+                </li>
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_login') }}">Login</a>
@@ -36,7 +36,7 @@
 
 <style>
     .custom-margin {
-        margin-right: 10px;
+        margin-right: 8px;
     }
 </style>
 
