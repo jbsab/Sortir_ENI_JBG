@@ -3,29 +3,25 @@
 {% block title %}S'inscrire{% endblock %}
 
 {% block body %}
-<div class="container-fluid container-md p-5 card shadow">
-    <div class="d-flex justify-content-center">
-        <h1>S'inscrire</h1>
-    </div>
+    <div class="container-fluid container-md p-5 card shadow">
+        <div class="d-flex justify-content-center">
+            <h1>S'inscrire</h1>
+        </div>
 
 
-    {{ form_errors(registrationForm) }}
+        {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
+        {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Mot de passe'
         }) }}
 
+        <button type="submit" class="btn btn-success btn-block mb-2">Register</button>
 
-        <div class="form-group">
-            {{ form_row(registrationForm.agreeTerms) }}
-        </div>
-
+        {{ form_end(registrationForm) }}
 
 
-    {{ form_end(registrationForm) }}
-
-    <button type="submit" class="btn btn-success btn-block mb-2">Register</button>
-</div>
+    </div>
 {% endblock %}
+
