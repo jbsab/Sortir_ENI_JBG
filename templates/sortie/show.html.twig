@@ -3,41 +3,88 @@
 {% block title %}Sortie "{{ sortie.nomSortie }}"{% endblock %}
 
 {% block body %}
-    <div class="container-fluid container-md shadow rounded p-3 mt-4">
-    <h1>Sortie "{{ sortie.nomSortie }}"</h1>
+        <div class="row">
+            <div class="col-6">
+                <table class="table table-bordered table-striped table-hover">
+                    <tbody>
 
-    <table class="table">
-        <tbody>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ sortie.id }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Nom de la sortie </th>
+                        <td>{{ sortie.nomSortie }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date et heure de la sortie</th>
+                        <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</td>
+                    </tr>
 
-        {% if is_granted("ROLE_ADMIN") %}
-            <tr>
-                <th>Id</th>
-                <td>{{ sortie.id }}</td>
-            </tr>
-        {% endif %}
-            <tr>
-                <th>Nom de la sortie </th>
-                <td>{{ sortie.nomSortie }}</td>
-            </tr>
-            <tr>
-                <th>Date et heure de la sortie</th>
-                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</td>
-            </tr>
+                    <tr>
+                        <th>Date Limite d'Inscription</th>
+                        <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre de places</th>
+                        <td>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</td>
+                    </tr>
 
-            <tr>
-            <th>Date Limite d'Inscription</th>
-            <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Nombre de places</th>
-                <td>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</td>
-            </tr>
+                    <tr>
+                        <th>Duree</th>
+                        <td>{{ sortie.duree }} minutes TODO CONVERSION</td>
+                    </tr>
 
-            <tr>
-                <th>Duree</th>
-                <td>{{ sortie.duree }} minutes TODO CONVERSION</td>
-            </tr>
 
+                    <tr>
+                        <th>Descriptions et infos</th>
+                        <td>{{ sortie.infosSortie }}</td>
+                    </tr>
+                    <tr>
+                        <th>Organisateur :</th>
+                        <td><a href="{{ path('app_participant_show', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }} </a></td>
+                    </tr>
+                    <tr>
+                        <th>Etat</th>
+                        <td>{{ sortie.etat }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <table class="table table-bordered table-striped table-hover">
+                    <tbody>
+                    <tr>
+                        <th>Campus</th>
+                        <td>{{ sortie.campus.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lieu</th>
+                        <td>{{ sortie.lieu.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Rue</th>
+                        <td>{{ sortie.lieu.rue }}</td>
+                    </tr>
+                    <tr>
+                        <th>Code Postal</th>
+                        <td>{{ sortie.lieu.ville.codePostal }}</td>
+                    </tr>
+                    <tr>
+                        <th>Latitude</th>
+                        <td>{{ sortie.lieu.latitude }}</td>
+                    </tr>
+                    <tr>
+                        <th>Longitude</th>
+                        <td>{{ sortie.lieu.longitude }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                IDEE TODO : Rajouter un lien vers google maps
+            </div>
+        </div>
 
             <tr>
                 <th>Descriptions et infos</th>
@@ -49,10 +96,10 @@
             </tr>
         </tbody>
     </table>
-    <div class="d-flex justify-content-center">
-        <a href="{{ path('sortir_main') }}">
-            <button class="btn btn-success">Retour à l'accueil</button>
-        </a>
+
+    <a href="{{ path('sortir_main') }}">
+        <button class="btn btn-success">Retour à l'accueil</button>
+    </a>
         {% if is_granted("ROLE_USER") %}
         <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
             <button class="btn btn-primary">Modifier la sortie</button> </a>
@@ -66,6 +113,5 @@
 
     <div class="p-5">
        <p>TODO RAJOUTER UN TABLEAU DE LA LISTE DES PARTICIPANTS INSCRITS</p>
-       <p>TODO RAJOUTER LES INFOS DU LIEU ET DU CAMPUS</p>
     </div>
 {% endblock %}

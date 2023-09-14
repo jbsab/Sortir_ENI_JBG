@@ -27,7 +27,11 @@
                     <a class="nav-link" href="{{ path('app_login') }}">Login</a>
                 </li>
             {% endif %}
-            <li class="nav-item"></li>
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a href="{{ path('admin') }}" class="nav-link">Admin</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

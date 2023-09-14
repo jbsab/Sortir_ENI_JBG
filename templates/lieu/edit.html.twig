@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le lieu{% endblock %}
+
+{% block body %}
+<div class="container-md col-8 p-3 card shadow">
+    <h1>Modifier le lieu</h1>
+
+    {{ include('lieu/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_lieu_index') }}">Retour à la liste des lieux</a>
+
+    {{ include('lieu/_delete_form.html.twig') }}
+</div>
+{% endblock %}

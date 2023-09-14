@@ -48,7 +48,7 @@ class SortieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($sortie);
             $entityManager->flush();
-            $this->addFlash('bg-success', 'La sortie a bien été crée.');
+            $this->addFlash('bg-success text-white', 'La sortie a bien été crée.');
 
             return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
@@ -75,7 +75,7 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $this->addFlash('bg-warning', 'La sortie a bien été modifée');
+            $this->addFlash('bg-warning text-dark', 'La sortie a bien été modifée');
 
             return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
@@ -92,7 +92,7 @@ class SortieController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$sortie->getId(), $request->request->get('_token'))) {
             $entityManager->remove($sortie);
             $entityManager->flush();
-            $this->addFlash('bg-danger', 'La sortie a bien été supprimée.');
+            $this->addFlash('bg-danger text-white', 'La sortie a bien été supprimée.');
         }
 
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);

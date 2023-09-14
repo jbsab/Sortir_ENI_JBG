@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ lieu.nom }}{% endblock %}
+
+{% block body %}
+<div class="container-md col-8 p-3 card shadow">
+    <h1>Lieu</h1>
+
+    <table class="table table-bordered table-striped table-hover">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ lieu.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ lieu.nom }}</td>
+            </tr>
+            <tr>
+                <th>Rue</th>
+                <td>{{ lieu.rue }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ lieu.latitude }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ lieu.longitude }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ lieu.ville.nom }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_lieu_index') }}">Retour à la liste des lieux</a>
+
+    <a href="{{ path('app_lieu_edit', {'id': lieu.id}) }}">Modifier le lieu</a>
+
+    {{ include('lieu/_delete_form.html.twig') }}
+</div>
+{% endblock %}

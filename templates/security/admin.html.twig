@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+
+    <div class="container-md p-4 card shadow">
+        <h1>Interface Administration</h1>
+        <a href="{{ path('app_campus_index') }}">Gestion des Campus</a>
+        <a href="{{ path('app_ville_index') }}">Gestion des villes</a>
+        <a href="{{ path('app_lieu_index') }}">Gestion des Lieux</a>
+        <a href="{{ path('app_participant_index') }}">Gestion des Participants</a>
+        <a href="{{ path('app_sortie_index') }}">Gestion des Sorties</a>
+
+{% endblock %}

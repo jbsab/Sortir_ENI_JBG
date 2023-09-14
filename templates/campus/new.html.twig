@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Campus{% endblock %}
+
+{% block body %}
+<div class="container-md col-8 p-3 card shadow">
+    <h1>Créer un nouveau Campus</h1>
+
+    {{ include('campus/_form.html.twig') }}
+
+    <a href="{{ path('app_campus_index') }}">Retour à la liste des campus</a>
+</div>
+{% endblock %}

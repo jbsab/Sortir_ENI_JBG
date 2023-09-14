@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des lieux{% endblock %}
+
+{% block body %}
+<div class="container-md col-8 p-3 card shadow">
+    <h1>Liste des lieux</h1>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Rue</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Ville</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lieu in lieus %}
+            <tr>
+                <td>{{ lieu.id }}</td>
+                <td>{{ lieu.nom }}</td>
+                <td>{{ lieu.rue }}</td>
+                <td>{{ lieu.latitude }}</td>
+                <td>{{ lieu.longitude }}</td>
+                <td>{{ lieu.ville.nom }}</td>
+                <td>
+                    <a href="{{ path('app_lieu_show', {'id': lieu.id}) }}">Afficher</a>
+                    <a href="{{ path('app_lieu_edit', {'id': lieu.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Pas de lieux trouvés</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_lieu_new') }}">Créer un nouveau lieu</a>
+</div>
+{% endblock %}

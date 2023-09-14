@@ -8,11 +8,9 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <div class="container-fluid container-sm p-5 card shadow mt-4">
+    <div class="container-fluid container-sm p-5 card shadow">
 <form>
-        <div class="d-flex justify-content-center">
-            <h1 class="h3 mb-3 font-weight-normal">Connecté vous</h1>
-        </div>
+        <h1 class="h3 mb-3 font-weight-normal">Connecté vous</h1>
         <label for="inputEmail">Email</label>
         <input class="w50 " type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
         <label for="inputPassword">Mot de passe</label>
@@ -29,7 +27,6 @@
             <input type="checkbox" name="_remember_me" checked>
             Se souvenir de moi
         </label>
-
     </div>
     </form>
     </div>
