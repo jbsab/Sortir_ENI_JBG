@@ -20,7 +20,7 @@
             </li>
             {% if app.user %}
                 <li class="mb-3 mt-2">
-                    Connecté avec {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-black text-decoration-none">Déconnexion</a>
+                    Connecté avec <a href="{{ path('app_participant_show', {'id': app.user.id}) }}">{{ app.user.userIdentifier }}</a>, <a href="{{ path('app_logout') }}" class="text-black text-decoration-none">Déconnexion</a>
                 </li>
             {% else %}
                 <li class="nav-item">
