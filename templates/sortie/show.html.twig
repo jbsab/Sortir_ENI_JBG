@@ -103,10 +103,11 @@
         {% if is_granted("ROLE_USER") %}
         <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
             <button class="btn btn-primary">Modifier la sortie</button> </a>
-    </div>
-
-
-    {{ include('sortie/_delete_form.html.twig') }}
+            <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
+                <button class="btn btn-success">Vous inscrire</button>
+            </a>
+            {{ include('sortie/_delete_form.html.twig') }}
+            </div>
         {% endif %}
     </div>
 

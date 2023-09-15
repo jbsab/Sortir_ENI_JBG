@@ -97,4 +97,33 @@ class SortieController extends AbstractController
 
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/inscription', name: 'app_sortie_inscription', methods: ['GET', 'POST'])]
+    public function inscription(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        $participant = $this->getUser();
+
+        if (!$sortie || !$participant) {
+            // Verification de l'existence de la sortie ou du participant
+            return new Response('Sortie ou participant non trouvé', 404);
+        }
+
+        // Vérification de si l'utilisateur n'est pas déjà inscrit à la sortie
+        if (!$sortie->getInscrit()->contains($participant)) {
+            $sortie->addInscrit($participant);
+
+            $sortie->setNbInscrits($sortie->getNbInscrits() + 1);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('bg-success text-white', 'Vous êtes inscrit à cette sortie !');
+
+        } else {
+
+            $this->addFlash('bg-danger text-white', 'Vous êtes déjà inscrit à cette sortie.');
+        }
+        return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
+    }
+
 }

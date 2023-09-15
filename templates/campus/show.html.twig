@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container-md col-8 p-3 card shadow">
     <h1>Campus {{ campus.nom }}</h1>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <table class="table table-bordered table-striped table-hover">
         <tbody>
             <tr>
@@ -18,11 +18,15 @@
             </tr>
         </tbody>
     </table>
+        <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">Modifier le campus</a>
+
+        {{ include('campus/_delete_form.html.twig') }}
+    {% endif %}
+
+    {% include 'sortie/_tableau_sorties.html.twig' %}
 
     <a href="{{ path('app_campus_index') }}">Retour à la liste des campus</a>
 
-    <a href="{{ path('app_campus_edit', {'id': campus.id}) }}">Modifier le campus</a>
 
-    {{ include('campus/_delete_form.html.twig') }}
 </div>
 {% endblock %}

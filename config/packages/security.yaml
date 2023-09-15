@@ -41,7 +41,8 @@ security:
      - { path: ^/admin, roles: ROLE_ADMIN }
      - { path: ^/ville/, roles: ROLE_ADMIN }
      - { path: ^/lieu/, roles: ROLE_ADMIN }
-     - { path: ^/campus/, roles: ROLE_ADMIN }
+     - { path: ^/campus/, roles: ROLE_USER }
+     - { path: ^/campus/new, roles: ROLE_ADMIN }
      - { path: ^/sortie/new, roles: ROLE_USER }
 
 when@test:

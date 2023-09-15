@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Campus;
 use App\Form\CampusType;
 use App\Repository\CampusRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ class CampusController extends AbstractController
     public function index(CampusRepository $campusRepository): Response
     {
         return $this->render('campus/index.html.twig', [
-            'campuses' => $campusRepository->findAll(),
+            'campuses' => $campusRepository->findAll()
         ]);
     }
 
@@ -43,10 +44,11 @@ class CampusController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_campus_show', methods: ['GET'])]
-    public function show(Campus $campus): Response
+    public function show(Campus $campus, SortieRepository $sortieRepository): Response
     {
         return $this->render('campus/show.html.twig', [
             'campus' => $campus,
+            'sorties' => $sortieRepository->findBy(['campus' => $campus])
         ]);
     }
 
