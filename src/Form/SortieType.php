@@ -42,12 +42,6 @@ class SortieType extends AbstractType
             ->add('infosSortie', TextareaType::class, [
                 'label' => 'Descriptions et infos'
             ])
-            ->add('etat', EntityType::class,[
-                'class' => Etat::class,
-                'label' => 'Etat (selectionner)',
-                'placeholder' => '---Selectionner---',
-                'choice_label' => 'libelle'
-                ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'label' => 'Choisir le campus organisateur',
@@ -60,6 +54,12 @@ class SortieType extends AbstractType
                 'placeholder' => '---Selectionner---',
                 'choice_label' => 'nom'
             ])
+//            ->add('etat', EntityType::class,[
+//            'class' => Etat::class,
+//            'label' => 'Etat (selectionner)',
+//            'placeholder' => '---Selectionner---',
+//            'choice_label' => 'libelle'
+//                      ])
 
         ;
     }

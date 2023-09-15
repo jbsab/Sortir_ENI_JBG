@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
@@ -28,9 +29,16 @@ class SortieController extends AbstractController
     #[Route('/', name: 'app_sortie_index', methods: ['GET'])]
     public function index(SortieRepository $sortieRepository): Response
     {
+//        $queryBuilder = $sortieRepository->createQueryBuilder('s')
+//            ->where('s.etat_id <> 1')
+//            ->getQuery();
+//        $sorties = $queryBuilder->getResult();
+
+        $sorties = $sortieRepository->findBy(['etat_id' => [2, 3, 4, 5, 6]]);
+
         return $this->render('sortie/index.html.twig', [
-            'sorties' => $sortieRepository->findAll(),
-        ]);
+            'sorties' => $sorties
+            ]);
     }
 
     #[Route('/new', name: 'app_sortie_new', methods: ['GET', 'POST'])]
@@ -41,6 +49,12 @@ class SortieController extends AbstractController
 
         $sortie = new Sortie();
         $sortie->setNbInscrits(0);
+
+        // récupération de l'etat avec l'id 1 (créée)
+        // définition de l'état par défaut à la creation de la sortie
+        $etatCree = $entityManager->getRepository(Etat::class)->find(1);
+        $sortie->setEtat($etatCree);
+
         // On définit le participant connecté actuel comme étant l'organisateur
         $sortie->setOrganisateur($participant);
 
@@ -49,6 +63,13 @@ class SortieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($sortie);
+
+            // vérifier si le bouton "publier" à été cliqué
+            if ($request->request->get('publier') === 'Publier') {
+                $etatCree = $entityManager->getRepository(Etat::class)->find(2);
+                $sortie->setEtat($etatCree);
+                $this->addFlash('bg-success text-white', 'La sortie a bien été publiée.');
+            }
             $entityManager->flush();
             $this->addFlash('bg-success text-white', 'La sortie a bien été crée.');
 
@@ -86,6 +107,14 @@ class SortieController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+
+                // vérifier si le bouton "publier" à été cliqué
+                if ($request->request->get('publier') === 'Publier') {
+                    $etatCree = $entityManager->getRepository(Etat::class)->find(2);
+                    $sortie->setEtat($etatCree);
+                    $this->addFlash('bg-success text-white', 'La sortie a bien été publiée.');
+                }
+
                 $entityManager->flush();
                 $this->addFlash('bg-warning text-dark', 'La sortie a bien été modifée');
 
