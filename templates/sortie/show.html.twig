@@ -3,7 +3,7 @@
 {% block title %}Sortie "{{ sortie.nomSortie }}"{% endblock %}
 
 {% block body %}
-<div class="container-fluid container-md shadow ">
+<div class="container-fluid container-md card shadow p-3 mt-3">
         <div class="row">
             <div class="col-6">
                 <table class="table table-bordered table-striped table-hover">
@@ -90,38 +90,29 @@
     <div class="d-flex justify-content-center p-3">
         <a href="{{ path('sortir_main') }}">
         <button class="btn btn-success">Retour à l'accueil</button>
-    </a>
+        </a>
         {% if is_granted("ROLE_USER") %}
-        <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
-            <button class="btn btn-primary">Modifier la sortie</button> </a>
-            <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
-                <button class="btn btn-success">Vous inscrire</button>
-            </a>
-            {{ include('sortie/_delete_form.html.twig') }}
-            </div>
-                    {% set isParticipantInscrit = sortie.inscrit.contains(app.user) %}
-                    {% if isParticipantInscrit %}
-                        <a href="{{ path('app_sortie_desinscription', {'id': sortie.id}) }}">
-                            <button class="btn btn-warning">Vous desinscrire</button>
-                        </a>
-                    {% else %}
-                    <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
-                        <button class="btn btn-success">Vous inscrire</button>
-                    {% endif %}
+            {% set isParticipantInscrit = sortie.inscrit.contains(app.user) %}
+                {% if isParticipantInscrit %}
+                    <a href="{{ path('app_sortie_desinscription', {'id': sortie.id}) }}">
+                    <button class="btn btn-warning">Vous desinscrire</button>
                     </a>
-                {{ include('sortie/_delete_form.html.twig') }}
-    </a>
-        {% if is_granted("ROLE_USER")%}
-    {% if app.user == sortie.organisateur or is_granted('ROLE_ADMIN')%}
-        <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
-            <button class="btn btn-primary">Modifier la sortie</button> </a>
+                {% else %}
+                    <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
+                    <button class="btn btn-success">Vous inscrire</button> </a>
+                {% endif %}
         {% endif %}
-            <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
-                <button class="btn btn-success">Vous inscrire</button>
-            </a>
-            {{ include('sortie/_delete_form.html.twig') }}
 
+        {% if app.user == sortie.organisateur or is_granted('ROLE_ADMIN')%}
+            <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
+            <button class="btn btn-primary">Modifier la sortie</button>
+            </a>
         {% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            {{ include('sortie/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
 
 </div>
 
@@ -130,8 +121,8 @@
         <h3>Liste des participants inscrits</h3>
         <table class="table table-bordered table-striped table-hover">
             <tbody>
-                <th>Pseudo</th>
             <tr>
+                <th>Pseudo</th>
                 <th>Nom</th>
             </tr>
             {% for participant in participants %}
