@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\SortieType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,8 +64,13 @@ class SortieController extends AbstractController
     #[Route('/{id}', name: 'app_sortie_show', methods: ['GET'])]
     public function show(Sortie $sortie): Response
     {
+        // On recupere la liste des inscrits à la sortie actuelle via la méthode
+        // getInscrit de l'entité Sortie
+        $participantsInscrits = $sortie->getInscrit()->toArray();
+
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+            'participants' => $participantsInscrits
         ]);
     }
 
@@ -133,6 +139,34 @@ class SortieController extends AbstractController
         } else {
 
             $this->addFlash('bg-danger text-white', 'Vous êtes déjà inscrit à cette sortie.');
+        }
+        return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/desincription', name: 'app_sortie_desinscription', methods: ['GET', 'POST'])]
+    public function desinscription(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+        $participant = $this->getUser();
+
+        if (!$sortie || !$participant) {
+            // Verification de l'existence de la sortie ou du participant
+            return new Response('Sortie ou participant non trouvé', 404);
+        }
+
+        // Vérification que l'utilisateur soit bien inscrit à la sortie
+        if ($sortie->getInscrit()->contains($participant)) {
+            $sortie->removeInscrit($participant);
+
+            $sortie->setNbInscrits($sortie->getNbInscrits() - 1);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('bg-success text-white', 'Vous n\'êtes plus inscrit à cette sortie !');
+
+        } else {
+
+            $this->addFlash('bg-danger text-white', 'Vous n\'êtes pas inscrit à cette sortie.');
         }
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
