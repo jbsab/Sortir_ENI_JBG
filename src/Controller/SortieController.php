@@ -11,6 +11,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie')]
 class SortieController extends AbstractController
@@ -68,22 +69,32 @@ class SortieController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sortie_edit', methods: ['GET', 'POST'])]
+    #[IsGranted("ROLE_USER")]
     public function edit(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(SortieType::class, $sortie);
-        $form->handleRequest($request);
+        $organisateur = $sortie->getOrganisateur();
+        $utilisateurActuel = $this->security->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            $this->addFlash('bg-warning text-dark', 'La sortie a bien été modifée');
+        if ($utilisateurActuel == $organisateur){
+            $form = $this->createForm(SortieType::class, $sortie);
+            $form->handleRequest($request);
 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
+                $this->addFlash('bg-warning text-dark', 'La sortie a bien été modifée');
+
+                return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->render('sortie/edit.html.twig', [
+                'sortie' => $sortie,
+                'form' => $form,
+            ]);
+        }else{
+            $this->addFlash('bg-danger text-white', 'Vous n\'êtes pas autorisé a modifier cette evenement');
             return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('sortie/edit.html.twig', [
-            'sortie' => $sortie,
-            'form' => $form,
-        ]);
     }
 
     #[Route('/{id}', name: 'app_sortie_delete', methods: ['POST'])]
