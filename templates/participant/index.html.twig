@@ -40,7 +40,9 @@
                 <td>{{ participant.image }}</td>
                 <td>
                     <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary btn-sm">show</a>
+                    {% if app.user is defined and app.user.id == participant.id %}
                     <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-warning btn-sm">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}

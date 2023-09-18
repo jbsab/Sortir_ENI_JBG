@@ -108,17 +108,21 @@ class SortieController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                // vérifier si le bouton "publier" à été cliqué
+               // vérifier si le bouton "publier" à été cliqué
                 if ($request->request->get('publier') === 'Publier') {
                     $etatCree = $entityManager->getRepository(Etat::class)->find(2);
                     $sortie->setEtat($etatCree);
                     $this->addFlash('bg-success text-white', 'La sortie a bien été publiée.');
+                }elseif ($request->request->get('annuler') === 'Annuler') {
+                    $etatAnnule = $entityManager->getRepository(Etat::class)->find(6);
+                    $sortie->setEtat($etatAnnule);
+                    $this->addFlash('bg-success text-white', 'La sortie a bien été annulée.');
                 }
-
                 $entityManager->flush();
                 $this->addFlash('bg-warning text-dark', 'La sortie a bien été modifée');
 
                 return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
+
             }
 
             return $this->render('sortie/edit.html.twig', [
@@ -129,6 +133,7 @@ class SortieController extends AbstractController
             $this->addFlash('bg-danger text-white', 'Vous n\'êtes pas autorisé a modifier cette evenement');
             return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         }
+
 
     }
 

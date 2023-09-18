@@ -2,11 +2,8 @@
     {{ form_widget(form) }}
 <div class="d-flex justify-content-center">
     <button class="btn btn-success m-2">{{ button_label|default('Enregistrer') }}</button>
-    <button class="btn btn-primary m-2" name="publier" value="Publier">{{ button_label|default('TODO Publier la sortie') }}</button>
-    <a href="{{ path('sortir_main') }}" >
-        <button type="button" class="btn btn-warning m-2" formnovalidate>Annuler</button>
-    </a>
-
+    <button class="btn btn-primary m-2" name="publier" value="Publier">{{ button_label|default('Publier') }}</button>
+    <button class="btn btn-warning m-2" name="annuler" value="Annuler">{{ button_label|default('Annuler la sortie') }}</button>
 </div>
 
 {{ form_end(form) }}

@@ -55,11 +55,13 @@
         <div class="d-flex justify-content-center p-1">
             <a href="{{ path('app_participant_index') }}"><button class="btn btn-primary">back to list</button></a>
         </div>
+        {% if app.user is defined and app.user.id == participant.id %}
         <div class="d-flex justify-content-center p-1">
             <a href="{{ path('app_participant_edit', {'id': participant.id}) }}"><button class="btn btn-warning">edit</button></a>
+
         </div>
             {{ include('participant/_delete_form.html.twig') }}
-
+        {% endif %}
 </div>
 
 {% endblock %}
