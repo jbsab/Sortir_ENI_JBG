@@ -27,6 +27,9 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: true
+
+            pattern: ^/
+            user_checker: App\Security\UserChecker
             # verifier la route
 
             # activate different ways to authenticate

@@ -20,10 +20,13 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $user = new Participant();
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setActif(true);
+            $user->setAdministrateur(false);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
