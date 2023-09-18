@@ -1,24 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Participant{% endblock %}
+{% block title %}Modifier le profil{% endblock %}
 
 {% block body %}
     {% if is_granted("ROLE_USER")%}
     {% if app.user == participant %}
-    <div class="container-fluid container p-2 card shadow">
+    <div class="container-sm p-2 card shadow">
         <div class="d-flex justify-content-center">
-            <h1>Edit Participant</h1>
+            <h1>Modifier le profil</h1>
         </div>
 
 
-            {{ include('participant/_form.html.twig',{'button_label': 'Update'}) }}
+            {{ include('participant/_form.html.twig',{'button_label': 'Mettre à jour'}) }}
 
         <div class="d-flex justify-content-center">
-            <a href="{{ path('app_participant_index') }}" class=" btn btn-primary btn-sm text-decoration-none mt-3">back to list</a>
+            <a href="{{ path('app_participant_index') }}" class=" btn btn-primary btn-sm text-decoration-none mt-3">Liste des participants</a>
         </div>
-            <div class="container-fluid container-md mt-3">
+            <div class="mt-3">
     {{ include('participant/_delete_form.html.twig') }}
-    </div>
+            </div>
     </div>
     {% endif %}
     {% endif %}

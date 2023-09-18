@@ -3,24 +3,20 @@
 {% block title %}Participant index{% endblock %}
 
 {% block body %}
-<div class="container-fluid container-xlg p-5 card shadow">
+<div class="container-fluid container-md p-5 card shadow">
     <div class="d-flex justify-content-center">
         <h1>Participant</h1>
     </div>
 
 
-    <table class="table">
+    <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr>
-                <th>Id</th>
+
                 <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Telephone</th>
-                <th>Administrateur</th>
-                <th>Actif</th>
                 <th>Image</th>
                 <th>actions</th>
             </tr>
@@ -28,20 +24,16 @@
         <tbody>
         {% for participant in participants %}
             <tr>
-                <td>{{ participant.id }}</td>
+
                 <td>{{ participant.email }}</td>
-                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
-                <td>{{ participant.password }}</td>
                 <td>{{ participant.nom }}</td>
                 <td>{{ participant.prenom }}</td>
                 <td>{{ participant.telephone }}</td>
-                <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
-                <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
                 <td>{{ participant.image }}</td>
                 <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary btn-sm">show</a>
+                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}" class="btn btn-primary btn-sm">Profil</a>
                     {% if app.user is defined and app.user.id == participant.id %}
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-warning btn-sm">edit</a>
+                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                     {% endif %}
                 </td>
             </tr>
@@ -53,8 +45,8 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-center">
-    <button class="btn btn-secondary">
-        <a href="{{ path('sortir_register') }}" class="text-black text-decoration-none">Create new</a>
+
+        <a href="{{ path('sortir_register') }}"><button class="btn btn-success">Créer un compte</button></a>
     </button>
     </div>
 

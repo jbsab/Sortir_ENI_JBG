@@ -3,29 +3,19 @@
 {% block title %}Participant{% endblock %}
 
 {% block body %}
-    <div class="container-fluid container-md p-5 card shadow">
+
+    <div class="container-fluid container-md card shadow p-3 mt-3">
         <div class="d-flex justify-content-center">
-            <h1>Participant</h1>
+            <h1>{{ participant.nom }}</h1>
         </div>
 
-        <table class="table border border-dark">
+        <table class="table table-bordered table-striped table-hover">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ participant.id }}</td>
-            </tr>
             <tr>
                 <th>Email</th>
                 <td>{{ participant.email }}</td>
             </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ participant.password }}</td>
-            </tr>
+
             <tr>
                 <th>Nom</th>
                 <td>{{ participant.nom }}</td>
@@ -39,6 +29,15 @@
                 <td>{{ participant.telephone }}</td>
             </tr>
             <tr>
+                <th>Image</th>
+                <td> <img src="../media/{{ participant.image }}" alt="photo de profil"></td>
+            </tr>
+            {% if is_granted('ROLE_ADMIN') %}
+            <tr>
+                <th>Id</th>
+                <td>{{ participant.id }}</td>
+            </tr>
+            <tr>
                 <th>Administrateur</th>
                 <td>{{ participant.administrateur ? 'Yes' : 'No' }}</td>
             </tr>
@@ -47,17 +46,19 @@
                 <td>{{ participant.actif ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>Image</th>
-                <td> <img src="../media/{{ participant.image }}" alt="photo de profil"></td>
+                <th>Roles</th>
+                <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
             </tr>
+        {% endif %}
         </tbody>
     </table>
+    </div>
         <div class="d-flex justify-content-center p-1">
-            <a href="{{ path('app_participant_index') }}"><button class="btn btn-primary">back to list</button></a>
+            <a href="{{ path('app_participant_index') }}"><button class="btn btn-primary">Liste des participants</button></a>
         </div>
         {% if app.user is defined and app.user.id == participant.id %}
         <div class="d-flex justify-content-center p-1">
-            <a href="{{ path('app_participant_edit', {'id': participant.id}) }}"><button class="btn btn-warning">edit</button></a>
+            <a href="{{ path('app_participant_edit', {'id': participant.id}) }}"><button class="btn btn-warning">Modifier</button></a>
 
         </div>
             {{ include('participant/_delete_form.html.twig') }}
