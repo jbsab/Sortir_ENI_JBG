@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/sortie')]
+#[Route('/')]
 class SortieController extends AbstractController
 {
     private $security;
@@ -26,11 +26,11 @@ class SortieController extends AbstractController
     }
     // Injection de la dépendance security dans le constructeur
 
-    #[Route('/', name: 'app_sortie_index', methods: ['GET'])]
+    #[Route('/', name: 'sortir_main', methods: ['GET'])]
     public function index(SortieRepository $sortieRepository): Response
     {
         $queryBuilder = $sortieRepository->createQueryBuilder('s')
-            ->where('s.etat_id <> 1')
+            ->where('s.etat <> 1')
             ->getQuery();
         $sorties = $queryBuilder->getResult();
 
@@ -202,5 +202,7 @@ class SortieController extends AbstractController
         }
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
+
+
 
 }
