@@ -3,18 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Entity\Sortie;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/participant')]
 class ParticipantController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+    // Injection de la dépendance security dans le constructeur
     #[Route('/', name: 'app_participant_index', methods: ['GET'])]
     public function index(ParticipantRepository $participantRepository): Response
     {
@@ -24,10 +36,28 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_participant_show', methods: ['GET'])]
-    public function show(Participant $participant): Response
+    #[IsGranted("ROLE_USER")]
+    public function show(Participant $participant,
+                         SortieRepository $sortieRepository): Response
     {
+        $utilisateurActuel = $this->security->getUser();
+
+        // vérification de si l'utilisateur est l'organisateur
+        // Si oui : la page affichera toutes les sorties sans distinction
+        // Si non : la page n'affichera que les sorties publiées
+        if ($utilisateurActuel === $participant) {
+            $sorties = $sortieRepository->findBy(['organisateur' => $participant->getId()]);
+        } else {
+            $queryBuilder = $sortieRepository->createQueryBuilder('s')
+                ->where('s.etat <> 1')
+                ->getQuery();
+            $sorties = $queryBuilder->getResult();
+
+        }
+
         return $this->render('participant/show.html.twig', [
             'participant' => $participant,
+            'sorties' => $sorties
         ]);
     }
 

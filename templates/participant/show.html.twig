@@ -65,4 +65,11 @@
         {% endif %}
 </div>
 
+<div class="container-fluid container-md card shadow p-3 mt-3">
+    <div class="d-flex justify-content-center">
+        <h1>Liste des sorties organisées par {{ participant.nom }}</h1>
+    </div>
+    {% include 'sortie/_tableau_sorties.html.twig' %}
+</div>
+
 {% endblock %}
