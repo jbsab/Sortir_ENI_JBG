@@ -24,6 +24,7 @@ class SortieController extends AbstractController
     public function __construct(Security $security)
     {
         $this->security = $security;
+        // rajouter le service des etats
     }
     // Injection de la dépendance security dans le constructeur
 
@@ -97,14 +98,17 @@ class SortieController extends AbstractController
 
         if ($sortie->getDateLimiteInscription() <= now()) {
             if ($sortie->getEtat()->getId() !== 3) {
+
                 $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
                 $sortie->setEtat($etatCloture);
-                dump($etatCloture);
+
                 $this->addFlash('bg-success text-white', 'Date d\'inscription dépassée - Inscriptions Clotûrées.');
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
             }
         }
 
-        dump($sortie->getEtat());
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
             'participants' => $participantsInscrits

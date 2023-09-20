@@ -42,23 +42,31 @@ class ParticipantController extends AbstractController
     {
         $utilisateurActuel = $this->security->getUser();
 
+        // Affichage de la liste des sorties dont l'utilisateur est organisateur :
         // vérification de si l'utilisateur est l'organisateur
-        // Si oui : la page affichera toutes les sorties sans distinction
-        // Si non : la page n'affichera que les sorties publiées
         if ($utilisateurActuel === $participant) {
+            // Si oui : la page affichera toutes les sorties sans distinction
             $sorties = $sortieRepository->findBy(['organisateur' => $participant->getId()]);
         } else {
+            // Si non : la page n'affichera que les sorties publiées
             $queryBuilder = $sortieRepository->createQueryBuilder('s')
-                ->where('s.etat <> 1')
+                ->where('s.organisateur = :organisateur AND s.etat <> 1')
+                ->setParameter('organisateur', $participant)
                 ->getQuery();
             $sorties = $queryBuilder->getResult();
 
         }
 
+        // Affichage de la liste des sorties dont l'utilisateur est participant
+        $sortiesInscrit = $participant->getEstInscrit()->toArray();
+
         return $this->render('participant/show.html.twig', [
             'participant' => $participant,
-            'sorties' => $sorties
+            'sorties' => $sorties,
+            'sortiesInscrit' => $sortiesInscrit
         ]);
+
+
     }
 
     #[Route('/{id}/edit', name: 'app_participant_edit', methods: ['GET', 'POST'])]
