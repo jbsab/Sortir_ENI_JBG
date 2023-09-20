@@ -21,12 +21,12 @@
                     </tr>
                     <tr>
                         <th>Date et heure de la sortie</th>
-                        <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</td>
+                        <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d-m-Y H:i') : '' }}</td>
                     </tr>
 
                     <tr>
                         <th>Date Limite d'Inscription</th>
-                        <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d') : '' }}</td>
+                        <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('d-m-Y') : '' }}</td>
                     </tr>
                     <tr>
                         <th>Nombre de places</th>
@@ -35,7 +35,7 @@
 
                     <tr>
                         <th>Duree</th>
-                        <td>{{ sortie.duree }} minutes TODO CONVERSION</td>
+                        <td>{{ sortie.duree }} minutes</td>
                     </tr>
 
 
