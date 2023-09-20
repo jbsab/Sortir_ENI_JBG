@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\Clock\now;
 
 #[Route('/')]
 class SortieController extends AbstractController
@@ -33,6 +34,7 @@ class SortieController extends AbstractController
             ->where('s.etat <> 1')
             ->getQuery();
         $sorties = $queryBuilder->getResult();
+
 
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties
@@ -64,9 +66,13 @@ class SortieController extends AbstractController
 
             // vérifier si le bouton "publier" à été cliqué
             if ($request->request->get('publier') === 'Publier') {
-                $etatCree = $entityManager->getRepository(Etat::class)->find(2);
-                $sortie->setEtat($etatCree);
+                $etatOuvert = $entityManager->getRepository(Etat::class)->find(2);
+                $sortie->setEtat($etatOuvert);
                 $this->addFlash('bg-success text-white', 'La sortie a bien été publiée.');
+            }elseif ($request->request->get('annuler') === 'Annuler') {
+                $etatAnnule = $entityManager->getRepository(Etat::class)->find(6);
+                $sortie->setEtat($etatAnnule);
+                $this->addFlash('bg-success text-white', 'La sortie a bien été annulée.');
             }
             $entityManager->flush();
             $this->addFlash('bg-success text-white', 'La sortie a bien été crée.');
@@ -81,16 +87,29 @@ class SortieController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_sortie_show', methods: ['GET'])]
-    public function show(Sortie $sortie): Response
+    public function show(Sortie $sortie,
+                        EntityManagerInterface $entityManager
+    ): Response
     {
         // On recupere la liste des inscrits à la sortie actuelle via la méthode
         // getInscrit de l'entité Sortie
         $participantsInscrits = $sortie->getInscrit()->toArray();
 
+        if ($sortie->getDateLimiteInscription() <= now()) {
+            if ($sortie->getEtat()->getId() !== 3) {
+                $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
+                $sortie->setEtat($etatCloture);
+                dump($etatCloture);
+                $this->addFlash('bg-success text-white', 'Date d\'inscription dépassée - Inscriptions Clotûrées.');
+            }
+        }
+
+        dump($sortie->getEtat());
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
             'participants' => $participantsInscrits
         ]);
+
     }
 
     #[Route('/{id}/edit', name: 'app_sortie_edit', methods: ['GET', 'POST'])]
@@ -108,8 +127,8 @@ class SortieController extends AbstractController
 
                // vérifier si le bouton "publier" à été cliqué
                 if ($request->request->get('publier') === 'Publier') {
-                    $etatCree = $entityManager->getRepository(Etat::class)->find(2);
-                    $sortie->setEtat($etatCree);
+                    $etatOuvert = $entityManager->getRepository(Etat::class)->find(2);
+                    $sortie->setEtat($etatOuvert);
                     $this->addFlash('bg-success text-white', 'La sortie a bien été publiée.');
                 }elseif ($request->request->get('annuler') === 'Annuler') {
                     $etatAnnule = $entityManager->getRepository(Etat::class)->find(6);
@@ -158,20 +177,35 @@ class SortieController extends AbstractController
             return new Response('Sortie ou participant non trouvé', 404);
         }
 
-        // Vérification de si l'utilisateur n'est pas déjà inscrit à la sortie
-        if (!$sortie->getInscrit()->contains($participant)) {
-            $sortie->addInscrit($participant);
-
-            $sortie->setNbInscrits($sortie->getNbInscrits() + 1);
-
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-            $this->addFlash('bg-success text-white', 'Vous êtes inscrit à cette sortie !');
-
+        // On vérifie si la date du jour a dépassé la date limite d'inscription
+        if ($sortie->getDateLimiteInscription() <= now()) {
+            $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
+            $sortie->setEtat($etatCloture);
+            $this->addFlash('bg-success text-white', 'Date d\'inscription dépassée');
+            return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         } else {
+            // Vérification de si l'utilisateur n'est pas déjà inscrit à la sortie
+            if (!$sortie->getInscrit()->contains($participant)) {
+                $sortie->addInscrit($participant);
 
-            $this->addFlash('bg-danger text-white', 'Vous êtes déjà inscrit à cette sortie.');
+                $sortie->setNbInscrits($sortie->getNbInscrits() + 1);
+
+                if (($sortie->getNbInscrits()) === ($sortie->getNbInscriptionsMax())) {
+                    $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
+                    $sortie->setEtat($etatCloture);
+                    $this->addFlash('bg-success text-white', 'Les inscriptions sont completes.');
+                }
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+                $this->addFlash('bg-success text-white', 'Vous êtes inscrit à cette sortie !');
+
+            } else {
+
+                $this->addFlash('bg-danger text-white', 'Vous êtes déjà inscrit à cette sortie.');
+            }
         }
+
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -186,20 +220,36 @@ class SortieController extends AbstractController
             return new Response('Sortie ou participant non trouvé', 404);
         }
 
-        // Vérification que l'utilisateur soit bien inscrit à la sortie
-        if ($sortie->getInscrit()->contains($participant)) {
-            $sortie->removeInscrit($participant);
-
-            $sortie->setNbInscrits($sortie->getNbInscrits() - 1);
-
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-            $this->addFlash('bg-success text-white', 'Vous n\'êtes plus inscrit à cette sortie !');
-
+        // On vérifie si la date du jour a dépassé la date limite d'inscription
+        if ($sortie->getDateLimiteInscription() <= now()) {
+            $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
+            $sortie->setEtat($etatCloture);
+            $this->addFlash('bg-success text-white', 'Date d\'inscription dépassée - Impossible de vous désinscrire');
+            return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
         } else {
+            // Vérification que l'utilisateur soit bien inscrit à la sortie
+            if ($sortie->getInscrit()->contains($participant)) {
+                $sortie->removeInscrit($participant);
 
-            $this->addFlash('bg-danger text-white', 'Vous n\'êtes pas inscrit à cette sortie.');
+                $sortie->setNbInscrits($sortie->getNbInscrits() - 1);
+
+                if (($sortie->getNbInscrits()) < ($sortie->getNbInscriptionsMax())) {
+                    $etatOuvert = $entityManager->getRepository(Etat::class)->find(2);
+                    $sortie->setEtat($etatOuvert);
+                    $this->addFlash('bg-success text-white', 'Les inscriptions sont à nouveau ouvertes.');
+                }
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+                $this->addFlash('bg-success text-white', 'Vous n\'êtes plus inscrit à cette sortie !');
+
+            } else {
+
+                $this->addFlash('bg-danger text-white', 'Vous n\'êtes pas inscrit à cette sortie.');
+            }
         }
+
+
         return $this->redirectToRoute('sortir_main', [], Response::HTTP_SEE_OTHER);
     }
 
