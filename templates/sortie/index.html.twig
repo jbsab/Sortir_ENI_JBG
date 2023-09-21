@@ -4,6 +4,30 @@
 
 {% block body %}
 <div class="container-md col-8 p-3 card shadow">
+    {#{{ form_start(filtersForm) }}
+    <div class="row">
+        <h4>Filtrer les sorties</h4>
+        <div class="col-5 form-group">
+            {{ form_row(filtersForm.campus) }}
+            {{ form_row(filtersForm.nomSortie) }}
+            <div class="row">
+                <div class="col">{{ form_row(filtersForm.dateDebut) }}</div>
+                <div class="col">{{ form_row(filtersForm.dateFin) }}</div>
+            </div>
+        </div>
+        <div class="col-4 offset-sm-1 mt-4 pt-5">
+            </br>
+            {{ form_row(filtersForm.organisateur) }}
+            {{ form_row(filtersForm.inscrit) }}
+            {{ form_row(filtersForm.pasInscrit) }}
+            {{ form_row(filtersForm.passees) }}
+        </div>
+        <div class="col-2 mt-5">
+            </br>
+            <button class="btnApp" type="submit">Rechercher</button>
+        </div>
+    </div>
+    {{ form_end(filtersForm) }}#}
     <h1>Liste des sorties</h1>
     {% include 'sortie/_tableau_sorties.html.twig' %}
 </div>

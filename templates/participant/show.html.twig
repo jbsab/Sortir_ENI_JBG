@@ -72,4 +72,33 @@
     {% include 'sortie/_tableau_sorties.html.twig' %}
 </div>
 
+<div class="container-md card shadow p-3 mt-3">
+    <h1>Liste des sorties auxquelles {{ participant.nom }} participe</h1>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Nom de la sortie</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for sortie in sortiesInscrit %}
+        <tr>
+            <td>{{ sortie.nomSortie }}</td>
+            <td>
+                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher la sortie</a>
+            </td>
+        </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">Pas de sortie trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
 {% endblock %}

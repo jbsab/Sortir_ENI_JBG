@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\FiltersSorties;
 use App\Entity\Sortie;
+use App\Form\FiltersSortiesType;
 use App\Form\SortieType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
@@ -24,21 +26,48 @@ class SortieController extends AbstractController
     public function __construct(Security $security)
     {
         $this->security = $security;
+        // rajouter le service des etats
     }
     // Injection de la dépendance security dans le constructeur
 
     #[Route('/', name: 'sortir_main', methods: ['GET'])]
-    public function index(SortieRepository $sortieRepository): Response
+    public function index(SortieRepository $sortieRepository,
+                          Request $request): Response
     {
+/*        // Classe D.T.O.
+        $oFilters = new FiltersSorties();
+
+        // On associe la classe de D.T.O. à son formulaire spécifique, ici FiltersSortiesFormType::class
+        $form = $this->createForm(FiltersSortiesType::class, $oFilters);
+        $form->handleRequest($request);
+
+        // On récupère l'utilisateur connecté
+        $oUser = $this->getUser();
+
+        // Pagination
+        $offset = max(0, $request->query->getInt('offset', 0));
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $paginator = $sortieRepository->findFilteredSorties($oFilters, $oUser, $offset);
+        } else {
+            $paginator = $sortieRepository->findCurrentSorties($offset);
+        }
+
+        return $this->render('sortie/index.html.twig', [
+            'sorties' => $paginator,
+            'previous' => $offset - SortieRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + SortieRepository::PAGINATOR_PER_PAGE),
+            'filtersForm' => $form->createView()*/
+
         $queryBuilder = $sortieRepository->createQueryBuilder('s')
             ->where('s.etat <> 1')
             ->getQuery();
         $sorties = $queryBuilder->getResult();
 
-
         return $this->render('sortie/index.html.twig', [
             'sorties' => $sorties
-            ]);
+
+        ]);
     }
 
     #[Route('/new', name: 'app_sortie_new', methods: ['GET', 'POST'])]
@@ -95,16 +124,57 @@ class SortieController extends AbstractController
         // getInscrit de l'entité Sortie
         $participantsInscrits = $sortie->getInscrit()->toArray();
 
+        // On vérifie si la date limite d'inscription est passée ou non
+        // auquel cas on passe l'état de la sortie en "cloturée"
+
         if ($sortie->getDateLimiteInscription() <= now()) {
             if ($sortie->getEtat()->getId() !== 3) {
+
                 $etatCloture = $entityManager->getRepository(Etat::class)->find(3);
                 $sortie->setEtat($etatCloture);
-                dump($etatCloture);
+
                 $this->addFlash('bg-success text-white', 'Date d\'inscription dépassée - Inscriptions Clotûrées.');
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
             }
         }
 
-        dump($sortie->getEtat());
+        // On vérifie si la date de début est passée ou non
+        // auquel cas on passe l'état de la sortie en "Activité en cours"
+        if ($sortie->getDateHeureDebut() <= now()) {
+            if ($sortie->getEtat()->getId() !== 4) {
+                $etatEnCours = $entityManager->getRepository(Etat::class)->find(4);
+                $sortie->setEtat($etatEnCours);
+
+                $this->addFlash('bg-success text-white', 'Inscriptions terminées - L\'activité est en cours');
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+            }
+
+            // On vérifie si la date de début est dépassée 24h
+            // Si oui, on passe le statut en "passée"
+            // Normalement il faudrait faire un calcul par rapport à la durée de l'evenement,
+            // A completer à l'occasion
+
+            $currentDateTime = new \DateTime(); // Date et heure actuelles
+            $next24HoursDateTime = clone $currentDateTime;
+            $next24HoursDateTime->modify('+24 hours'); // Ajoute 24 heures à la date actuelle
+
+            if ($sortie->getDateHeureDebut() <= $next24HoursDateTime) {
+                if ($sortie->getEtat()->getId() !== 5) {
+                    $etatEnCours = $entityManager->getRepository(Etat::class)->find(5);
+                    $sortie->setEtat($etatEnCours);
+
+                    $this->addFlash('bg-success text-white', 'Activité terminée');
+
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
+                }
+            }
+        }
+
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
             'participants' => $participantsInscrits
