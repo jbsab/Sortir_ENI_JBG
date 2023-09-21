@@ -34,32 +34,31 @@ class SortieController extends AbstractController
     public function index(SortieRepository $sortieRepository,
                           Request $request): Response
     {
-/*        // Classe D.T.O.
-        $oFilters = new FiltersSorties();
 
-        // On associe la classe de D.T.O. à son formulaire spécifique, ici FiltersSortiesFormType::class
-        $form = $this->createForm(FiltersSortiesType::class, $oFilters);
-        $form->handleRequest($request);
+        /*        // Classe D.T.O.
+                $oFilters = new FiltersSorties();
 
-        // On récupère l'utilisateur connecté
-        $oUser = $this->getUser();
+                // On associe la classe de D.T.O. à son formulaire spécifique, ici FiltersSortiesFormType::class
+                $form = $this->createForm(FiltersSortiesType::class, $oFilters);
+                $form->handleRequest($request);
 
-        // Pagination
-        $offset = max(0, $request->query->getInt('offset', 0));
+                // On récupère l'utilisateur connecté
+                $oUser = $this->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $paginator = $sortieRepository->findFilteredSorties($oFilters, $oUser, $offset);
-        } else {
-            $paginator = $sortieRepository->findCurrentSorties($offset);
-        }
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $sorties = $sortieRepository->findFilteredSorties($oFilters, $oUser);
+                }
+                else
+                {
+                    $sorties = $sortieRepository->findCurrentSorties();
+                }
 
-        return $this->render('sortie/index.html.twig', [
-            'sorties' => $paginator,
-            'previous' => $offset - SortieRepository::find,
-            'next' => min(count($paginator), $offset + SortieRepository::PAGINATOR_PER_PAGE),
-            'filtersForm' => $form->createView()*/
+                return $this->render('sortie/index.html.twig',[
+                    'sorties' => $sorties,
+                    'filtersForm' => $form->createView()
+                ]); */
 
-        $queryBuilder = $sortieRepository->createQueryBuilder('s')
+      $queryBuilder = $sortieRepository->createQueryBuilder('s')
             ->where('s.etat <> 1')
             ->getQuery();
         $sorties = $queryBuilder->getResult();

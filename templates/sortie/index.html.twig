@@ -7,9 +7,11 @@
 {% block body %}
 <div class="container-md col-8 p-3 card shadow">
 
+
     <h1>Liste des sorties</h1>
+
     <div>
-        <button class="btn btn-primary mb-3" id="btnToggle" name="serge" >Changer l'affichage</button>
+        <button class="btn btn-primary mb-3" id="btnToggle">Changer l'affichage</button>
     </div>
 
     <div id="toggleCard" class="invisible">{% include 'sortie/_card_sorties.html.twig' %}</div>
@@ -18,27 +20,31 @@
 </div>
 {% endblock %}
 
-    {#{{ form_start(filtersForm) }}
-    <div class="row">
-        <h4>Filtrer les sorties</h4>
-        <div class="col-5 form-group">
-            {{ form_row(filtersForm.campus) }}
-            {{ form_row(filtersForm.nomSortie) }}
-            <div class="row">
-                <div class="col">{{ form_row(filtersForm.dateDebut) }}</div>
-                <div class="col">{{ form_row(filtersForm.dateFin) }}</div>
-            </div>
-        </div>
-        <div class="col-4 offset-sm-1 mt-4 pt-5">
-            </br>
-            {{ form_row(filtersForm.organisateur) }}
-            {{ form_row(filtersForm.inscrit) }}
-            {{ form_row(filtersForm.pasInscrit) }}
-            {{ form_row(filtersForm.passees) }}
-        </div>
-        <div class="col-2 mt-5">
-            </br>
-            <button class="btnApp" type="submit">Rechercher</button>
+
+
+{# Code pour l'affichage des filtres, actuellement non fonctionnel
+
+{{ form_start(filtersForm) }}
+<div class="row">
+    <h4>Filtrer les sorties</h4>
+    <div class="col-5 form-group">
+        {{ form_row(filtersForm.campus) }}
+        {{ form_row(filtersForm.nomSortie) }}
+        <div class="row">
+            <div class="col">{{ form_row(filtersForm.dateDebut) }}</div>
+            <div class="col">{{ form_row(filtersForm.dateFin) }}</div>
         </div>
     </div>
-    {{ form_end(filtersForm) }}#}
+    <div class="col-4 offset-sm-1 mt-4 pt-5">
+        <br>
+        {{ form_row(filtersForm.organisateur) }}
+        {{ form_row(filtersForm.inscrit) }}
+        {{ form_row(filtersForm.pasInscrit) }}
+        {{ form_row(filtersForm.passees) }}
+    </div>
+    <div class="col-2 mt-5">
+        <br>
+        <button class="btnApp" type="submit">Rechercher</button>
+    </div>
+</div>
+{{ form_end(filtersForm) }}#}

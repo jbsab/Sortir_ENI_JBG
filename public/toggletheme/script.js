@@ -6,7 +6,7 @@ let card = document.getElementById('toggleCard');
 
 btn.addEventListener("click", function ()
 {
-    counter++
+    counter++;
     if (counter % 2 !== 0) {
         table.className='invisible';
         card.className='';
