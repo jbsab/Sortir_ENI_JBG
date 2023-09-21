@@ -94,23 +94,23 @@
 
     <div class="d-flex justify-content-center p-3">
         <a href="{{ path('sortir_main') }}">
-        <button class="btn btn-success">Retour à l'accueil</button>
+        <button class="btn btn-success m-2">Retour à l'accueil</button>
         </a>
         {% if is_granted("ROLE_USER") %}
             {% set isParticipantInscrit = sortie.inscrit.contains(app.user) %}
                 {% if isParticipantInscrit %}
                     <a href="{{ path('app_sortie_desinscription', {'id': sortie.id}) }}">
-                    <button class="btn btn-warning">Vous desinscrire</button>
+                    <button class="btn btn-warning m-2">Vous desinscrire</button>
                     </a>
                 {% else %}
                     <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">
-                    <button class="btn btn-success">Vous inscrire</button> </a>
+                    <button class="btn btn-success m-2">Vous inscrire</button> </a>
                 {% endif %}
         {% endif %}
 
         {% if app.user == sortie.organisateur or is_granted('ROLE_ADMIN')%}
             <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">
-            <button class="btn btn-primary">Modifier la sortie</button>
+            <button class="btn btn-primary m-2">Modifier la sortie</button>
             </a>
         {% endif %}
 
