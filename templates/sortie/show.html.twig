@@ -4,8 +4,13 @@
 
 {% block body %}
 <div class="container-fluid container-md card shadow p-3 mt-3">
+    <h1 class="d-flex justify-content-center">{{ sortie.nomSortie }}</h1>
+    <div class="d-flex justify-content-center">
+        <img class=" m-3 shadow" src="https://picsum.photos/300/200" alt="Random Placeholder picture" width="300">
+    </div>
         <div class="row">
             <div class="col-6">
+
                 <table class="table table-bordered table-striped table-hover">
                     <tbody>
 
@@ -135,4 +140,6 @@
             </tbody>
         </table>
     </div>
+
+
 {% endblock %}
