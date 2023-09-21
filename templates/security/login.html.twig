@@ -8,7 +8,7 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <div class="container-fluid container-sm p-5 card shadow">
+    <div class="container-fluid container-sm p-5 mt-4 card shadow">
 <form>
         <h1 class="h3 mb-3 font-weight-normal">Connectez vous</h1>
         <label for="inputEmail">Email</label>
@@ -18,10 +18,10 @@
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}">
-    <div class="d-flex justify-content-center p-4">
-        <button class="btn btn-md btn-primary btn-lg btn-sm mx-2" type="submit">Sign in</button>
-        <a href="{{ path('sortir_register') }}" class="btn btn-secondary btn-sm ml-2">M'inscrire</a>
-        <a href="{{ path('app_forgot_password_request') }}" class=" text-black text-decoration-none">Mot de passe oublié</a>
+    <div class="d-flex justify-content-center p-3">
+        <button class="btn btn-md btn-primary btn-lg btn-sm mx-2" type="submit">Se connecter</button>
+        <a href="{{ path('sortir_register') }}" class="btn btn-md btn-primary btn-lg btn-sm mx-2">M'inscrire</a>
+            <a href="{{ path('app_forgot_password_request') }}" class="text-black m-2">Mot de passe oublié</a>
     </div>
     <div class="form-check text-center mt-2">
         <label>
