@@ -1,0 +1,36 @@
+    <a class="m-3" href="{{ path('app_sortie_new') }}"><button class="btn btn-primary">Créer une sortie</button></a>
+<div class="row">
+{% for sortie in sorties %}
+
+        <div class="col-md-5 col-lg-4 mb-4">
+            <div class="card listCard shadow" style="width: 18rem;">
+                    <img src="https://picsum.photos/300/200?random={{ random() }}" class="card-img-top" alt="Random image placeholder">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ sortie.nomSortie }}</h5>
+                        <p class="card-text listCard-text">{{ sortie.infosSortie }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush p-3">
+
+                        <p class="card-text mb-1"><strong>Date : </strong>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i') : '' }}</p>
+                        <p class="card-text mb-1"><strong>Participants : </strong>{{ sortie.nbInscrits }}/{{ sortie.nbInscriptionsMax }}</p>
+                        <p class="card-text mb-1"><strong>Etat : </strong>{{ sortie.etat }}</p>
+                    </ul>
+                    <div class="card-footer">
+                        <small class="text-body-secondary">
+                            Organisateur : <a href="{{ path('app_participant_show', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }}</a>
+                             -
+                            <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Afficher la sortie</a>
+                        </small>
+                    </div>
+            </div>
+        </div>
+
+    {% if loop.index % 3 == 0 %}
+</div><div class="row">
+    {% endif %}
+{% else %}
+
+<p>Pas de sortie trouvée</p>
+
+{% endfor %}
+</div>

@@ -2,8 +2,22 @@
 
 {% block title %}Sortie index{% endblock %}
 
+
+
 {% block body %}
 <div class="container-md col-8 p-3 card shadow">
+
+    <h1>Liste des sorties</h1>
+    <div>
+        <button class="btn btn-primary mb-3" id="btnToggle" name="serge" >Changer l'affichage</button>
+    </div>
+
+    <div id="toggleCard" class="invisible">{% include 'sortie/_card_sorties.html.twig' %}</div>
+    <div id="toggleTable">{% include 'sortie/_tableau_sorties.html.twig' %}</div>
+
+</div>
+{% endblock %}
+
     {#{{ form_start(filtersForm) }}
     <div class="row">
         <h4>Filtrer les sorties</h4>
@@ -28,7 +42,3 @@
         </div>
     </div>
     {{ form_end(filtersForm) }}#}
-    <h1>Liste des sorties</h1>
-    {% include 'sortie/_tableau_sorties.html.twig' %}
-</div>
-{% endblock %}

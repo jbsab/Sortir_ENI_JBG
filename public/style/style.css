@@ -1,0 +1,24 @@
+.listCard {
+    transition: transform 0.3s ease-in-out;
+    max-height: 500px; /* Définissez la hauteur maximale souhaitée */
+    overflow: hidden;
+}
+
+.listCard:hover{
+    color: navy;
+    transform: scale(1.05);
+}
+
+.listCard-text {
+    white-space: normal;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Nombre de lignes à afficher avant d'appliquer l'ellipsis */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; /* Ajoute des points de suspension (...) lorsque le texte est coupé */
+}
+
+.invisible {
+    display: none;
+    visibility: hidden;
+}

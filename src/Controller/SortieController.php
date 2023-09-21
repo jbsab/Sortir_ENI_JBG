@@ -55,7 +55,7 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/index.html.twig', [
             'sorties' => $paginator,
-            'previous' => $offset - SortieRepository::PAGINATOR_PER_PAGE,
+            'previous' => $offset - SortieRepository::find,
             'next' => min(count($paginator), $offset + SortieRepository::PAGINATOR_PER_PAGE),
             'filtersForm' => $form->createView()*/
 
